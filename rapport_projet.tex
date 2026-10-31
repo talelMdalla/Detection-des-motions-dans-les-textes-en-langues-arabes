@@ -1,0 +1,225 @@
+\documentclass[11pt,a4paper]{article}
+
+\usepackage[a4paper,margin=2.15cm,headheight=15pt]{geometry}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage[french]{babel}
+\usepackage{lmodern}
+\usepackage{microtype}
+\usepackage{booktabs,tabularx,array}
+\usepackage[table]{xcolor}
+\usepackage{tikz}
+\usetikzlibrary{arrows.meta,positioning,shapes.geometric,fit,calc}
+\usepackage{enumitem}
+\usepackage{fancyhdr}
+\usepackage{hyperref}
+\usepackage{float}
+
+\definecolor{navy}{HTML}{17365D}
+\definecolor{teal}{HTML}{007C91}
+\definecolor{pale}{HTML}{EAF1F8}
+\definecolor{ink}{HTML}{263445}
+\hypersetup{colorlinks=true,linkcolor=navy,urlcolor=teal}
+\setlength{\parskip}{5pt}
+\setlength{\parindent}{0pt}
+\setlist[itemize]{leftmargin=1.3em,itemsep=2pt,topsep=3pt}
+\pagestyle{fancy}\fancyhf{}
+\lhead{Projet de fouille de données et NLP}
+\rhead{Analyse des émotions en arabe}
+\cfoot{\thepage}
+\renewcommand{\headrulewidth}{0.4pt}
+
+\tikzset{
+  phase/.style={draw=navy,fill=pale,rounded corners=3pt,align=center,
+    text width=2.72cm,minimum height=1.05cm,font=\small},
+  tool/.style={draw=teal,fill=teal!7,rounded corners=3pt,align=center,
+    text width=2.38cm,minimum height=.92cm,font=\small},
+  flow/.style={-{Latex[length=2.2mm]},thick,draw=teal},
+  smallbox/.style={draw=navy,fill=white,rounded corners=2pt,align=center,
+    text width=2.15cm,minimum height=.8cm,font=\footnotesize}
+}
+
+\title{\textcolor{navy}{Analyse des émotions dans des textes arabes}\\[5pt]
+\large De la compréhension métier à la préparation des données}
+\author{Projet d'intelligence artificielle et de fouille de données}
+\date{31 octobre 2026}
+
+\begin{document}
+\maketitle
+\vspace{-1.0em}
+\begin{center}
+\colorbox{pale}{\parbox{.92\linewidth}{\centering\small
+Ce rapport présente la conception d'un agent IA de collecte sur le Web, l'exploration d'un corpus de textes arabes et sa préparation pour une analyse des émotions par thème.}}
+\end{center}
+
+\section*{Résumé exécutif}
+Nous avons conçu un agent IA qui recherche des pages Web publiques à partir d'une requête en arabe, extrait des segments arabophones, puis utilise un modèle Gemini pour filtrer les textes pertinents et proposer une étiquette de thème et d'émotion. Les données structurées sont exportées en CSV; un manifeste accompagne les nouvelles collectes afin de relier chaque observation à son URL, à sa requête et à ses métadonnées de traitement.
+
+Le corpus exploré dans ce projet comprend 50\,050 lignes au départ. Après normalisation et suppression de 995 textes répétés, le jeu préparé comporte 49\,055 textes répartis en six thèmes et cinq émotions. Une séparation stratifiée reproductible a produit 34\,327 observations d'entraînement, 7\,347 de validation et 7\,381 de test. Le travail couvre les phases de compréhension métier, collecte, compréhension des données et préparation; il constitue une base prête pour une prochaine expérimentation de classification.
+
+\textbf{Question de recherche :} comment les émotions annotées varient-elles selon le thème abordé dans les textes arabes étudiés ?
+
+\section{Compréhension métier}
+\subsection{Contexte et problème à résoudre}
+Les conversations publiées sur Internet contiennent des réactions et des opinions sur des sujets variés. Leur lecture manuelle rend difficile la comparaison systématique de grands volumes de textes. Le projet organise ces contenus dans un corpus structuré afin de décrire les émotions qui leur sont associées et leur variation selon le thème.
+
+Le périmètre observé regroupe six thèmes : sport, économie, politique, religion, technologie et santé. Les émotions retenues sont la joie (\texttt{joy}), la colère (\texttt{anger}), la tristesse (\texttt{sadness}), l'espoir (\texttt{hope}) et le neutre (\texttt{neutral}).
+
+\subsection{Pourquoi la fouille de données et l'apprentissage automatique}
+La fouille de données permet de résumer les volumes, d'examiner les distributions et de faire apparaître des régularités dans les textes. Les techniques de traitement automatique du langage peuvent ensuite aider à classer de nouveaux commentaires à grande échelle. Dans ce projet, l'IA intervient déjà pour soutenir le filtrage et l'annotation initiale; l'entraînement d'un classifieur dédié est une étape ultérieure, construite à partir des données préparées.
+
+\subsection{Objectifs et critères de réussite}
+\begin{itemize}
+  \item définir un corpus arabe organisé par thème et émotion;
+  \item automatiser la recherche, l'extraction, le filtrage et l'annotation initiale;
+  \item mesurer la structure, les distributions et la qualité des champs;
+  \item produire des données propres, documentées et réutilisables;
+  \item livrer des partitions reproductibles pour les prochaines analyses et expériences ML.
+\end{itemize}
+
+\subsection{Plan de travail}
+Le projet suit une démarche inspirée de CRISP-DM : cadrer la question et les objectifs; acquérir les pages et extraire les textes; comprendre le corpus par des contrôles et statistiques descriptives; transformer les données en un jeu cohérent et partitionné. Chaque phase produit des fichiers ou des informations utiles à la phase suivante.
+
+\begin{figure}[H]
+\centering
+\begin{tikzpicture}[node distance=5mm]
+\node[phase] (b) {1. Compréhension\\métier};
+\node[phase,right=of b] (c) {2. Collecte\\par l'agent IA};
+\node[phase,right=of c] (u) {3. Compréhension\\des données};
+\node[phase,right=of u] (p) {4. Préparation\\du corpus};
+\draw[flow] (b)--(c); \draw[flow] (c)--(u); \draw[flow] (u)--(p);
+\draw[flow] (p.south) -- ++(0,-.45) -| ([yshift=-.45cm]b.south) -- (b.south);
+\node[below=9mm of u,align=center,font=\footnotesize,text=ink] {Résultat : corpus documenté et partitions prêtes pour une expérimentation de classification};
+\end{tikzpicture}
+\caption{Démarche générale du projet. La préparation alimente les analyses et les expérimentations futures.}
+\end{figure}
+
+\section{Collecte des données}
+\subsection{Sources et recherche sur le Web}
+L'agent utilise l'API Tavily pour rechercher des pages Web publiques. La demande est définie dans \texttt{AI\_agent/prompt.txt}, avec une requête en arabe, la langue ciblée, les six thèmes et le nombre maximal de pages par exécution. La configuration courante limite la recherche à dix résultats et privilégie les contenus en arabe associés à la Tunisie.
+
+La réponse du moteur peut inclure l'URL, le titre et le contenu extrait de chaque page. Le programme privilégie le contenu brut lorsqu'il est disponible, retire les éléments de mise en forme et les liens intégrés, puis découpe le texte en segments. Un filtre linguistique conserve les segments comportant suffisamment de caractères arabes; les segments trop courts et les répétitions exactes sont écartés.
+
+\subsection{Agent IA et outils utilisés}
+L'agent est développé en Python. Tavily fournit la recherche et les résultats de pages. Gemini (modèle \texttt{gemini-2.5-flash}) assiste le filtrage de pertinence et attribue les champs \texttt{topic} et \texttt{emotion} selon un schéma structuré. Une température nulle et des catégories explicites rendent les réponses plus cohérentes d'une observation à l'autre. Les clés API sont chargées depuis le fichier local \texttt{AI\_agent/.env}; elles ne sont pas écrites dans les fichiers de données.
+
+\begin{figure}[H]
+\centering
+\begin{tikzpicture}[node distance=7mm and 8mm]
+\node[tool] (request) {\texttt{AI\_agent/prompt.txt}\\requête et critères};
+\node[tool,right=of request] (tavily) {API Tavily\\recherche Web};
+\node[tool,right=of tavily] (pages) {Pages publiques\\URL, titre, contenu};
+\node[tool,below=of pages] (extract) {Extraction\\segments arabes};
+\node[tool,left=of extract] (gemini) {API Gemini\\filtrage et labels};
+\node[tool,left=of gemini] (export) {CSV + manifeste\\JSON d'exécution};
+\draw[flow] (request)--(tavily); \draw[flow] (tavily)--(pages);
+\draw[flow] (pages)--(extract); \draw[flow] (extract)--(gemini);
+\draw[flow] (gemini)--(export);
+\node[below=8mm of gemini,align=center,font=\footnotesize,text=ink] {Schéma principal : \texttt{id, text, topic, emotion}};
+\end{tikzpicture}
+\caption{Chaîne de collecte et d'annotation mise en œuvre dans \texttt{AI\_agent/agent.py}.}
+\end{figure}
+
+\subsection{Données brutes, données structurées et traçabilité}
+Les contenus retournés par la recherche constituent l'entrée brute de l'agent. Après extraction, chaque segment retenu est transmis au modèle pour déterminer sa pertinence, son thème et son émotion. Les lignes acceptées sont écrites dans \texttt{AI\_agent/output/dataset.csv}, avec les quatre champs demandés : identifiant, texte, thème et émotion.
+
+Pour assurer la traçabilité des exécutions, l'agent écrit également \texttt{AI\_agent/output/dataset\_sources.csv}, qui associe l'identifiant à l'URL et au titre de la page, à la requête, à l'heure UTC, à l'empreinte SHA-256 et au modèle d'annotation. Le résumé \texttt{AI\_agent/output/collecte\_run.json} consigne les paramètres et les volumes traités. Les étiquettes sont ainsi accompagnées de leur contexte de collecte dans les exécutions de l'agent.
+
+\section{Compréhension des données}
+\subsection{Description du corpus}
+Le fichier de départ analysé, \texttt{AI\_agent/output/arabic\_topic\_emotion\_dataset\_50000.csv}, contient 50\,050 lignes. Son schéma est constitué de quatre colonnes : \texttt{id}, \texttt{text}, \texttt{topic} et \texttt{emotion}. Les contenus sont des textes courts en arabe et le traitement conserve les caractères arabes ainsi que les emojis.
+
+\begin{table}[H]
+\centering
+\caption{Description des variables}
+\begin{tabularx}{\linewidth}{>{\ttfamily}l l X}
+\toprule
+Champ & Type & Rôle dans le projet \\
+\midrule
+id & entier & Identifiant de la ligne pour le suivi et le rattachement au manifeste \\
+text & texte & Contenu arabe traité par l'agent; entrée textuelle pour un futur modèle \\
+topic & catégorie & Thème du contenu; variable de comparaison \\
+emotion & catégorie & Émotion attribuée; cible potentielle d'un classifieur \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+\subsection{Exploration et qualité}
+Les contrôles structurels n'ont relevé aucune valeur manquante, aucun texte vide et aucune étiquette hors vocabulaire dans le fichier initial. La longueur des textes préparés varie de 32 à 81 caractères; la médiane est de 57 et la moyenne de 56,84 caractères. La comparaison des textes a repéré 995 répétitions exactes, supprimées lors de la préparation.
+
+\begin{table}[H]
+\centering
+\caption{Répartition du corpus préparé par thème}
+\begin{tabular}{lrr}
+\toprule Thème & Effectif & Part \\
+\midrule
+Économie & 8\,238 & 16,8\% \\
+Santé & 8\,092 & 16,5\% \\
+Politique & 8\,245 & 16,8\% \\
+Religion & 8\,165 & 16,6\% \\
+Sport & 8\,223 & 16,8\% \\
+Technologie & 8\,092 & 16,5\% \\
+\midrule Total & 49\,055 & 100\% \\
+\bottomrule
+\end{tabular}
+\hspace{1.2cm}
+\begin{tabular}{lrr}
+\toprule Émotion & Effectif & Part \\
+\midrule
+Colère & 9\,821 & 20,0\% \\
+Espoir & 9\,811 & 20,0\% \\
+Joie & 9\,807 & 20,0\% \\
+Neutre & 9\,822 & 20,0\% \\
+Tristesse & 9\,794 & 20,0\% \\
+\midrule Total & 49\,055 & 100\% \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+La répartition des thèmes est proche d'un sixième du corpus par thème, et chacune des cinq émotions représente environ un cinquième des observations. Le fichier \texttt{croisement\_theme\_emotion.csv} présente les effectifs détaillés pour chaque couple thème--émotion et permet de poursuivre l'analyse comparative.
+
+\section{Préparation des données}
+\subsection{Nettoyage et transformation}
+Le script \texttt{nettoyage.py} automatise les opérations suivantes :
+\begin{enumerate}[leftmargin=1.5em,itemsep=2pt]
+  \item vérification de la présence des quatre colonnes attendues;
+  \item normalisation des espaces du texte et harmonisation des étiquettes en minuscules;
+  \item suppression des textes vides et des catégories non prévues;
+  \item déduplication exacte, insensible à la casse, en conservant la première occurrence;
+  \item réattribution d'identifiants séquentiels;
+  \item export des données nettoyées et séparation stratifiée avec la graine 42.
+\end{enumerate}
+Les opérations préservent les caractères arabes, les emojis et le contenu textuel informatif. La stratification est faite selon les couples thème--émotion pour maintenir leur composition dans chaque partition.
+
+\subsection{Intégration et enrichissement}
+L'intégration se fait autour d'un schéma stable partagé par la collecte et le nettoyage. Les nouvelles sorties de l'agent sont prioritaires comme entrée du script de préparation; le jeu archivé reste disponible comme source de repli. L'enrichissement consiste à ajouter aux textes les catégories de thème et d'émotion proposées par Gemini, puis à relier les identifiants aux métadonnées du manifeste. Les statistiques calculées à l'étape d'exploration documentent les volumes, les distributions, la longueur et les croisements de catégories.
+
+\subsection{Partitions et livrables}
+\begin{table}[H]
+\centering
+\caption{Séparation reproductible du corpus}
+\begin{tabular}{lrr}
+\toprule Partition & Lignes & Proportion \\
+\midrule Entraînement & 34\,327 & 70\% \\
+Validation & 7\,347 & 15\% \\
+Test & 7\,381 & 15\% \\
+\midrule Total & 49\,055 & 100\% \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+Les fichiers livrés dans \texttt{projet ML/donnees/} sont \texttt{dataset\_nettoye.csv}, \texttt{train.csv}, \texttt{validation.csv}, \texttt{test.csv}, \texttt{statistiques.json}, \texttt{exploration.json} et \texttt{croisement\_theme\_emotion.csv}. Les CSV utilisent UTF-8 avec BOM. Pour une première classification, \texttt{text} constitue l'entrée, \texttt{emotion} la cible et \texttt{id} reste un identifiant de suivi.
+
+\section{Reproduction du projet}
+Depuis la racine du dépôt, les dépendances Python sont \texttt{pandas}, \texttt{numpy}, \texttt{python-dotenv}, \texttt{tavily-python} et \texttt{google-genai}. Les deux clés API sont configurées localement dans \texttt{AI\_agent/.env}. Les commandes principales sont :
+\begin{verbatim}
+python AI_agent/agent.py
+python "projet ML/nettoyage.py"
+python "projet ML/analyse_exploratoire.py"
+\end{verbatim}
+La première commande recherche et annote les textes; la deuxième nettoie et partitionne le CSV disponible; la troisième regénère les statistiques d'exploration et le tableau croisé.
+
+\section*{Conclusion}
+Le projet met en place une chaîne complète de préparation de données textuelles : le besoin métier guide la recherche, l'agent IA automatise la collecte et l'annotation initiale, l'exploration décrit le corpus, puis le nettoyage produit des partitions reproductibles. Ce livrable fournit une base organisée pour comparer les émotions entre thèmes et pour développer, dans une phase suivante, un modèle NLP évalué de manière structurée.
+
+\end{document}

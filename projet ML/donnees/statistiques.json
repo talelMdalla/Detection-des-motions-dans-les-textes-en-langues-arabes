@@ -1,0 +1,68 @@
+{
+  "source": "AI_agent\\output\\arabic_topic_emotion_dataset_50000.csv",
+  "seed": 42,
+  "rows_initiales": 50050,
+  "valeurs_manquantes_initiales": 0,
+  "textes_vides_supprimes": 0,
+  "lignes_a_labels_invalides_supprimees": 0,
+  "textes_dupliques_supprimes": 995,
+  "lignes_finales": 49055,
+  "repartition": {
+    "train": 34327,
+    "validation": 7347,
+    "test": 7381
+  },
+  "themes": {
+    "economy": 8238,
+    "health": 8092,
+    "politics": 8245,
+    "religion": 8165,
+    "sport": 8223,
+    "technology": 8092
+  },
+  "emotions": {
+    "anger": 9821,
+    "hope": 9811,
+    "joy": 9807,
+    "neutral": 9822,
+    "sadness": 9794
+  },
+  "longueur_caracteres": {
+    "minimum": 32,
+    "mediane": 57.0,
+    "moyenne": 56.84,
+    "maximum": 81
+  },
+  "distribution_theme_emotion": {
+    "economy|anger": 1643,
+    "economy|hope": 1649,
+    "economy|joy": 1641,
+    "economy|neutral": 1651,
+    "economy|sadness": 1654,
+    "health|anger": 1623,
+    "health|hope": 1614,
+    "health|joy": 1620,
+    "health|neutral": 1623,
+    "health|sadness": 1612,
+    "politics|anger": 1660,
+    "politics|hope": 1639,
+    "politics|joy": 1637,
+    "politics|neutral": 1656,
+    "politics|sadness": 1653,
+    "religion|anger": 1618,
+    "religion|hope": 1640,
+    "religion|joy": 1650,
+    "religion|neutral": 1637,
+    "religion|sadness": 1620,
+    "sport|anger": 1654,
+    "sport|hope": 1648,
+    "sport|joy": 1642,
+    "sport|neutral": 1639,
+    "sport|sadness": 1640,
+    "technology|anger": 1623,
+    "technology|hope": 1621,
+    "technology|joy": 1617,
+    "technology|neutral": 1616,
+    "technology|sadness": 1615
+  }
+}

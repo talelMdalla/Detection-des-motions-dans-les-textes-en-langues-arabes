@@ -1,0 +1,79 @@
+{
+  "fichier": "dataset_nettoye.csv",
+  "lignes": 49055,
+  "valeurs_manquantes_par_colonne": {
+    "id": 0,
+    "text": 0,
+    "topic": 0,
+    "emotion": 0
+  },
+  "identifiants_uniques": 49055,
+  "textes_uniques": 49055,
+  "longueur_caracteres": {
+    "min": 32,
+    "q1": 53.0,
+    "mediane": 57.0,
+    "moyenne": 56.84,
+    "q3": 61.0,
+    "max": 81
+  },
+  "themes": {
+    "economy": 8238,
+    "health": 8092,
+    "politics": 8245,
+    "religion": 8165,
+    "sport": 8223,
+    "technology": 8092
+  },
+  "emotions": {
+    "anger": 9821,
+    "hope": 9811,
+    "joy": 9807,
+    "neutral": 9822,
+    "sadness": 9794
+  },
+  "croisement_theme_emotion": {
+    "economy": {
+      "anger": 1643,
+      "hope": 1649,
+      "joy": 1641,
+      "neutral": 1651,
+      "sadness": 1654
+    },
+    "health": {
+      "anger": 1623,
+      "hope": 1614,
+      "joy": 1620,
+      "neutral": 1623,
+      "sadness": 1612
+    },
+    "politics": {
+      "anger": 1660,
+      "hope": 1639,
+      "joy": 1637,
+      "neutral": 1656,
+      "sadness": 1653
+    },
+    "religion": {
+      "anger": 1618,
+      "hope": 1640,
+      "joy": 1650,
+      "neutral": 1637,
+      "sadness": 1620
+    },
+    "sport": {
+      "anger": 1654,
+      "hope": 1648,
+      "joy": 1642,
+      "neutral": 1639,
+      "sadness": 1640
+    },
+    "technology": {
+      "anger": 1623,
+      "hope": 1621,
+      "joy": 1617,
+      "neutral": 1616,
+      "sadness": 1615
+    }
+  }
+}

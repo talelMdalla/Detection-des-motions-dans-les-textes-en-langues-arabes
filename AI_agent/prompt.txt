@@ -1,0 +1,14 @@
+Collecte exploratoire de textes publics en arabe standard et en dialectes arabes, issus de pages web accessibles publiquement. Le corpus couvre six thèmes : sport, économie, politique, religion, technologie et santé. Rechercher des commentaires, réactions et opinions; exclure les titres seuls et les textes purement factuels.
+
+- Requête de recherche web (arabe) : آراء وتعليقات الجمهور حول الرياضة والاقتصاد والسياسة والدين والتكنولوجيا والصحة
+- Langue : arabe standard et dialectes arabes; dialecte/pays à consigner quand il peut être établi
+- Type de données : textes publiquement accessibles, avec URL de la page source
+- Maximum : 10 pages de résultats par exécution
+- Objectif : explorer la distribution des émotions annotées selon le thème
+- Thèmes autorisés : sport, economy, politics, religion, technology, health
+- Émotions autorisées : joy, anger, sadness, hope, neutral
+
+Le modèle aide au filtrage et à l'annotation. Ses étiquettes ne sont pas une vérité terrain : elles doivent être contrôlées par des annotateurs humains avant toute conclusion ou entraînement.
+
+Génère un CSV avec exactement ces colonnes :
+id, text, topic, emotion

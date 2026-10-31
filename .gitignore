@@ -1,0 +1,25 @@
+# Secrets et configuration locale
+.env
+**/.env
+.env.*
+!.env.example
+
+# Environnements et caches Python
+.venv/
+venv/
+__pycache__/
+*.py[cod]
+
+# Fichiers temporaires de LaTeX
+*.aux
+*.log
+*.out
+*.toc
+*.fls
+*.fdb_latexmk
+*.synctex.gz
+
+# Artefacts de rendu et fichiers système
+rendu_qa/
+Thumbs.db
+Desktop.ini
