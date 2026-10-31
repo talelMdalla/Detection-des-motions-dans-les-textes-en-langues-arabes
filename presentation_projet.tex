@@ -1,0 +1,254 @@
+\documentclass[aspectratio=169,10pt]{beamer}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[french]{babel}
+\usepackage{lmodern}
+\usepackage{tikz}
+\usetikzlibrary{arrows.meta,positioning,calc}
+\usepackage{booktabs}
+\usepackage{array}
+
+\definecolor{Navy}{HTML}{102A43}
+\definecolor{Blue}{HTML}{176B87}
+\definecolor{Teal}{HTML}{18A6A6}
+\definecolor{Gold}{HTML}{F2B84B}
+\definecolor{Pale}{HTML}{EAF3F6}
+\definecolor{Ink}{HTML}{243B53}
+\setbeamercolor{normal text}{fg=Ink,bg=white}
+\setbeamercolor{structure}{fg=Blue}
+\setbeamercolor{frametitle}{fg=Navy,bg=white}
+\setbeamercolor{title}{fg=white}
+\setbeamercolor{subtitle}{fg=white!85}
+\setbeamercolor{block title}{fg=white,bg=Navy}
+\setbeamercolor{block body}{fg=Ink,bg=Pale}
+\setbeamertemplate{navigation symbols}{}
+\setbeamertemplate{footline}{\hfill\color{Blue}\scriptsize Sujet 4\quad\insertframenumber/\inserttotalframenumber\hspace{.7cm}\vspace{.25cm}}
+\setbeamertemplate{frametitle}{\vspace{.2cm}\insertframetitle\par\vspace{-.12cm}\color{Teal}\rule{\linewidth}{1pt}}
+\setlength{\parskip}{4pt}
+\setbeamersize{text margin left=.65cm,text margin right=.65cm}
+\tikzset{nodebox/.style={rounded corners=3pt,draw=Blue,fill=Pale,align=center,minimum height=1cm,text width=2.65cm,font=\small},
+ arrow/.style={-{Latex[length=2mm]},thick,draw=Teal},
+ mini/.style={rounded corners=2pt,draw=Blue,fill=white,align=center,minimum height=.75cm,text width=2.2cm,font=\footnotesize}}
+
+\title{Sujet 4 : Détection des émotions dans les textes en langues arabes}
+\subtitle{De la collecte Web à la préparation d'un corpus exploitable}
+\author{Talel Mdalla \and Adem Sghaier \and Aziz Oueslati}
+\date{Projet de fouille de données et d'intelligence artificielle}
+
+\begin{document}
+
+% 1 — Page de garde
+\begin{frame}[plain]
+\begin{tikzpicture}[remember picture,overlay]
+\fill[Navy] (current page.north west) rectangle (current page.south east);
+\fill[Blue] (current page.north east) -- ++(-4.3,0) -- ++(0,-9) -- cycle;
+\fill[Teal] (current page.south west) rectangle ([yshift=.18cm]current page.south east);
+\end{tikzpicture}
+\vspace{.6cm}
+{\color{Gold}\small PROJET DE DATA MINING ET NLP}\par\vspace{.4cm}
+{\color{white}\LARGE\bfseries Sujet 4 : Détection des émotions\\dans les textes en langues arabes}\par\vspace{.4cm}
+{\color{white!85}\large Collecter, comprendre et préparer les données avec un agent IA}\par
+\vspace{.9cm}
+\begin{beamercolorbox}[wd=.86\linewidth,sep=.18cm,rounded=true]{block body}
+\textbf{Question (partie 3)}\\[-1pt]
+Variation des émotions en fonction de quoi ?\\
+\textcolor{Blue}{\textbf{En fonction du thème abordé}} : sport, économie, politique, religion, technologie et santé.
+\end{beamercolorbox}
+\vfill
+{\color{white!90}\normalsize Talel Mdalla \qquad Adem Sghaier \qquad Aziz Oueslati}\par
+{\color{white!70}\small 31 octobre 2026}\vspace{.45cm}
+\end{frame}
+
+% 2 — Problème métier
+\begin{frame}{Compréhension métier : le besoin}
+\begin{columns}[T,onlytextwidth]
+\column{.53\textwidth}
+\large\textbf{Le problème}\par
+Les réactions en arabe publiées sur le Web sont nombreuses et réparties sur des sujets variés. Une lecture manuelle rend leur comparaison lente et difficile à reproduire.
+\vspace{.35cm}
+\begin{block}{Question de recherche}
+Comment les émotions exprimées dans le corpus varient-elles selon le thème abordé ?
+\end{block}
+\column{.43\textwidth}
+\textbf{Objectifs du projet}
+\begin{enumerate}\item Collecter et structurer des textes arabes.\item Décrire les thèmes et émotions.\item Nettoyer et partitionner le corpus.\item Préparer une base pour une future classification NLP.\end{enumerate}
+\end{columns}
+\vspace{.15cm}
+\begin{center}\textcolor{Blue}{\textbf{Pourquoi data mining + ML ?}}\quad Résumer les volumes aujourd'hui; automatiser le classement de textes demain.\end{center}
+\end{frame}
+
+% 3 — Démarche globale
+\begin{frame}{Plan de travail : quatre phases liées}
+\centering
+\begin{tikzpicture}[node distance=1.05cm]
+\node[nodebox] (b) {\textbf{1. Business understanding}\\Question, contexte, objectifs};
+\node[nodebox,right=of b] (c) {\textbf{2. Data collection}\\Agent IA et sources Web};
+\node[nodebox,right=of c] (u) {\textbf{3. Data understanding}\\Description et qualité};
+\node[nodebox,right=of u] (p) {\textbf{4. Data preparation}\\Nettoyage et partitions};
+\draw[arrow] (b)--(c);\draw[arrow] (c)--(u);\draw[arrow] (u)--(p);
+\node[below=.8cm of c,mini] (raw) {Pages et textes bruts};
+\node[below=.8cm of u,mini] (clean) {Corpus structuré};
+\node[below=.8cm of p,mini] (splits) {Train / validation / test};
+\draw[arrow] (c.south) -- (raw.north);\draw[arrow] (u.south)--(clean.north);\draw[arrow] (p.south)--(splits.north);
+\end{tikzpicture}
+\vspace{.45cm}
+\begin{beamercolorbox}[wd=.86\linewidth,sep=.16cm,center,rounded=true]{block body}
+Chaque phase transforme une question métier en données structurées, vérifiées et prêtes pour l'analyse.
+\end{beamercolorbox}
+\end{frame}
+
+% 4 — Architecture agent
+\begin{frame}{L'agent IA : de la requête aux données}
+\centering
+\begin{tikzpicture}[node distance=5mm and 7mm]
+\node[mini] (prompt) {\textbf{Prompt}\\requête arabe};
+\node[mini,right=of prompt] (search) {\textbf{Tavily API}\\recherche Web};
+\node[mini,right=of search] (web) {\textbf{Pages Web}\\URL, titre, contenu};
+\node[mini,below=of web] (extract) {\textbf{Extraction}\\segments arabes};
+\node[mini,left=of extract] (gemini) {\textbf{Gemini API}\\filtre + annotations};
+\node[mini,left=of gemini] (csv) {\textbf{Exports}\\CSV + manifeste};
+\draw[arrow] (prompt)--(search);\draw[arrow] (search)--(web);\draw[arrow] (web)--(extract);\draw[arrow] (extract)--(gemini);\draw[arrow] (gemini)--(csv);
+\end{tikzpicture}
+\vspace{.65cm}
+\begin{columns}[T,onlytextwidth]
+\column{.48\textwidth}\begin{block}{Tavily}
+Recherche de pages publiques, jusqu'à 10 résultats en arabe et ciblage géographique Tunisie.
+\end{block}
+\column{.48\textwidth}\begin{block}{Gemini}
+Vérifie la pertinence, assigne un thème et propose une émotion selon un schéma contrôlé.
+\end{block}
+\end{columns}
+\vspace{.12cm}\small Les clés API sont chargées depuis \texttt{AI\_agent/.env}; elles ne sont pas intégrées au dépôt Git.
+\end{frame}
+
+% 5 — Collecte et schéma
+\begin{frame}{Collecte : extraire, filtrer, enrichir}
+\begin{columns}[T,onlytextwidth]
+\column{.47\textwidth}
+\textbf{Traitement des pages}\par
+\begin{enumerate}\item Lire le contenu brut disponible.\item Retirer le balisage et les liens.\item Segmenter le texte.\item Garder les segments arabes d'au moins 25 caractères.\item Écarter les répétitions exactes.\item Faire annoter les textes pertinents.\end{enumerate}
+\column{.49\textwidth}
+\textbf{Schéma du CSV}\par\vspace{.15cm}
+\begin{tabular}{>{\ttfamily}l p{5.1cm}}\toprule
+id & identifiant stable de l'observation\\\midrule
+text & segment arabe extrait de la page\\
+topic & sport, economy, politics, religion, technology ou health\\
+emotion & joy, anger, sadness, hope ou neutral\\\bottomrule
+\end{tabular}
+\end{columns}
+\vspace{.35cm}
+\begin{center}\colorbox{Pale}{\parbox{.9\linewidth}{\centering\small
+Le manifeste relie chaque identifiant à son URL, au titre, à la requête, à l'heure UTC, à l'empreinte du texte et au modèle d'annotation.}}\end{center}
+\end{frame}
+
+% 6 — Compréhension données / qualité
+\begin{frame}{Compréhension des données : portrait du corpus}
+\centering
+\begin{tikzpicture}[node distance=7mm]
+\node[mini,text width=2.25cm] (n) {\textcolor{Blue}{\LARGE\bfseries 50\,050}\\lignes initiales};
+\node[mini,text width=2.25cm,right=of n] (missing) {\textcolor{Teal}{\LARGE\bfseries 0}\\valeur manquante};
+\node[mini,text width=2.25cm,right=of missing] (topics) {\textcolor{Blue}{\LARGE\bfseries 6}\\thèmes};
+\node[mini,text width=2.25cm,right=of topics] (emotions) {\textcolor{Teal}{\LARGE\bfseries 5}\\émotions};
+\end{tikzpicture}
+\vspace{.65cm}
+\begin{columns}[T,onlytextwidth]
+\column{.48\textwidth}
+\textbf{Contrôles réalisés}
+\begin{itemize}\item colonnes attendues présentes;\item textes et labels manquants contrôlés;\item validité des catégories vérifiée;\item doublons exacts détectés;\item longueurs et distributions décrites.\end{itemize}
+\column{.48\textwidth}
+\textbf{Longueur du texte}\par\vspace{.25cm}
+\begin{tikzpicture}[x=1cm,y=.55cm]
+\draw[thick,Blue] (0,0)--(5.9,0);
+\draw[thick,Blue] (0,-.13)--(0,.13);\draw[thick,Blue] (5.9,-.13)--(5.9,.13);
+\fill[Teal] (2.5,-.16) rectangle (3.2,.16);
+\node[below] at (0,-.12) {32 min};\node[below] at (5.9,-.12) {81 max};
+\node[above] at (2.85,.17) {médiane 57};
+\end{tikzpicture}
+\vspace{.25cm}\\\small Moyenne : 56,84 caractères.
+\end{columns}
+\end{frame}
+
+% 7 — Répartition thèmes
+\begin{frame}{Exploration : les six thèmes}
+\small Chaque barre représente la part du thème dans les 49\,055 textes préparés.
+\vspace{.2cm}
+\begin{center}
+\begin{tikzpicture}[x=0.42cm,y=.63cm]
+\foreach \y/\label/\val/\pct in {5/Économie/8238/16.8,4/Santé/8092/16.5,3/Politique/8245/16.8,2/Religion/8165/16.6,1/Sport/8223/16.8,0/Technologie/8092/16.5}{
+  \node[anchor=east,text=Ink,font=\small] at (-.35,\y) {\label};
+  \fill[Pale] (0,\y-.18) rectangle (10,\y+.18);
+  \fill[Blue] (0,\y-.18) rectangle ({\val/823.8},\y+.18);
+  \node[anchor=west,font=\small] at (10.25,\y) {\val\quad (\pct\%)};
+}
+\draw[gray!55] (0,-.48)--(0,5.48);
+\end{tikzpicture}
+\end{center}
+\vspace{.15cm}
+\begin{beamercolorbox}[wd=.9\linewidth,sep=.15cm,center,rounded=true]{block body}
+La question « variation selon quoi ? » est opérationnalisée par le champ \texttt{topic} : on compare les émotions à l'intérieur de chaque thème.
+\end{beamercolorbox}
+\end{frame}
+
+% 8 — émotions
+\begin{frame}{Exploration : les cinq émotions}
+\begin{columns}[T,onlytextwidth]
+\column{.55\textwidth}
+\small Effectifs et part des 49\,055 observations\par\vspace{.15cm}
+\begin{tikzpicture}[x=.45cm,y=.68cm]
+\foreach \y/\label/\val in {4/Colère/9821,3/Espoir/9811,2/Joie/9807,1/Neutre/9822,0/Tristesse/9794}{
+  \node[anchor=east,font=\small] at (-.3,\y) {\label};
+  \fill[Pale] (0,\y-.18) rectangle (10,\y+.18);
+  \fill[Teal] (0,\y-.18) rectangle ({\val/1000},\y+.18);
+  \node[anchor=west,font=\small] at (10.2,\y) {\val};
+}
+\end{tikzpicture}
+\column{.4\textwidth}
+\begin{block}{Lecture descriptive}
+Chaque classe représente environ 20\% du corpus. La comparaison par thème s'appuie sur le croisement \texttt{topic} $\times$ \texttt{emotion}.
+\end{block}
+\vspace{.2cm}\small Les effectifs détaillés par couple sont exportés dans \texttt{croisement\_theme\_emotion.csv}.
+\end{columns}
+\end{frame}
+
+% 9 — préparation et split
+\begin{frame}{Préparation : nettoyer puis partitionner}
+\centering
+\begin{tikzpicture}[node distance=4mm and 5mm]
+\node[mini] (raw) {CSV source\\50\,050};
+\node[mini,right=of raw] (norm) {Normaliser\\espaces + labels};
+\node[mini,right=of norm] (valid) {Contrôler\\texte + catégories};
+\node[mini,right=of valid] (dedup) {Dédupliquer\\995 retirés};
+\node[mini,right=of dedup] (clean) {Corpus prêt\\49\,055};
+\draw[arrow] (raw)--(norm);\draw[arrow] (norm)--(valid);\draw[arrow] (valid)--(dedup);\draw[arrow] (dedup)--(clean);
+\end{tikzpicture}
+\vspace{.7cm}
+\textbf{Découpage stratifié par thème et émotion (graine 42)}
+\vspace{.15cm}
+\begin{tikzpicture}[x=1cm,y=1cm]
+\fill[Blue] (0,0) rectangle (8.4,.65);
+\fill[Teal] (8.4,0) rectangle (10.2,.65);
+\fill[Gold] (10.2,0) rectangle (12,.65);
+\node[white,font=\small\bfseries] at (4.2,.32) {Train : 34\,327 (70\%)};
+\node[white,font=\scriptsize\bfseries] at (9.3,.32) {Val.\\7\,347};
+\node[Navy,font=\scriptsize\bfseries] at (11.1,.32) {Test\\7\,381};
+\end{tikzpicture}
+\vspace{.45cm}
+\small Les caractères arabes et les emojis sont conservés; les CSV sont exportés en UTF-8 avec BOM.
+\end{frame}
+
+% 10 — Conclusion
+\begin{frame}{Résultat : un corpus prêt pour l'analyse}
+\begin{columns}[T,onlytextwidth]
+\column{.55\textwidth}
+\textbf{Ce que le projet a construit}
+\begin{itemize}\item un agent de recherche et d'annotation initiale;\item un schéma de données stable et documenté;\item un pipeline reproductible de nettoyage et d'exploration;\item trois partitions réutilisables pour des expériences NLP.\end{itemize}
+\column{.4\textwidth}
+\begin{block}{Suite logique}
+Entraîner un modèle de classification des émotions, l'évaluer sur le jeu de test, puis comparer les résultats par thème.
+\end{block}
+\end{columns}
+\vfill
+\begin{center}\Large\textcolor{Blue}{Des pages Web aux données prêtes pour le NLP}\end{center}
+\end{frame}
+
+\end{document}

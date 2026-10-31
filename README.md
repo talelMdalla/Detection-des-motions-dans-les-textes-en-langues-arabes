@@ -9,6 +9,7 @@ Projet de fouille de données et de traitement automatique du langage naturel (N
 - `AI_agent/output/` : corpus de référence fourni.
 - `projet ML/` : scripts de nettoyage et d'exploration, données préparées, statistiques et documentation.
 - `rapport_projet.tex` et `rapport_projet.pdf` : rapport et schémas du projet.
+- `presentation_projet.tex` et `presentation_projet.pdf` : présentation Beamer de 10 diapositives.
 
 ## Démarrage rapide
 
@@ -32,4 +33,4 @@ L'agent écrit le jeu de données, son manifeste de sources et un résumé d'ex�
 
 Le corpus de référence compte 50 050 lignes avant nettoyage et 49 055 après suppression de 995 textes répétés. Il couvre six thèmes et cinq émotions; les partitions train, validation et test sont créées avec une graine fixe.
 
-Pour la démarche métier, la collecte, l'exploration, la préparation et les schémas, consulter le [rapport PDF](rapport_projet.pdf) et son [source LaTeX](rapport_projet.tex). Les instructions détaillées sont dans [`projet ML/README.md`](projet%20ML/README.md).
+Pour la présentation orale, consulter la [présentation PDF](presentation_projet.pdf) et son [source LaTeX Beamer](presentation_projet.tex). Pour les détails de la démarche, voir le [rapport PDF](rapport_projet.pdf) et son [source LaTeX](rapport_projet.tex). Les instructions détaillées sont dans [`projet ML/README.md`](projet%20ML/README.md).

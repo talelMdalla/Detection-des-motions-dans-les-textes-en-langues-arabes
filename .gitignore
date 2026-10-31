@@ -21,5 +21,9 @@ __pycache__/
 
 # Artefacts de rendu et fichiers système
 rendu_qa/
+.edge-pdf-profile/
+.presentation-build.html
+.codex-slide-*.png
+.slide-check-*.png
 Thumbs.db
 Desktop.ini
