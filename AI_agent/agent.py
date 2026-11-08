@@ -18,7 +18,7 @@ from google.genai import types
 # ==================================================
 
 PROJECT_DIR = Path(__file__).resolve().parent
-load_dotenv(PROJECT_DIR / ".env")
+load_dotenv(PROJECT_DIR / ".env.example")
 
 GEMINI_API_KEY = os.getenv("GEMINI_API_KEY")
 TAVILY_API_KEY = os.getenv("TAVILY_API_KEY")
@@ -36,13 +36,13 @@ if not TAVILY_API_KEY:
 gemini = genai.Client(api_key=GEMINI_API_KEY)
 search = TavilyClient(api_key=TAVILY_API_KEY)
 
-MODEL = "gemini-2.5-flash"
+MODEL = "gemini-3.8-flash"
 
 PROMPT_FILE = str(PROJECT_DIR / "prompt.txt")
-OUTPUT_DIR = str(PROJECT_DIR / "output")
-OUTPUT_FILE = os.path.join(OUTPUT_DIR, "dataset.csv")
-MANIFEST_FILE = os.path.join(OUTPUT_DIR, "dataset_sources.csv")
-RUN_FILE = os.path.join(OUTPUT_DIR, "collecte_run.json")
+OUTPUT_DIR = str(PROJECT_DIR / "output2")
+OUTPUT_FILE = os.path.join(OUTPUT_DIR, "dataset2.csv")
+MANIFEST_FILE = os.path.join(OUTPUT_DIR, "dataset_sources2.csv")
+RUN_FILE = os.path.join(OUTPUT_DIR, "collecte_run2.json")
 
 EMOTIONS = [
     "joy",
