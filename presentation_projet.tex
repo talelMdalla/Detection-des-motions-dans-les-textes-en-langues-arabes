@@ -31,10 +31,10 @@
  arrow/.style={-{Latex[length=2mm]},thick,draw=Teal},
  mini/.style={rounded corners=2pt,draw=Blue,fill=white,align=center,minimum height=.75cm,text width=2.2cm,font=\footnotesize}}
 
-\title{Sujet 4 : Détection des émotions dans les textes en langues arabes}
+\title{Détecter les émotions dans les textes en arabe}
 \subtitle{De la collecte Web à la préparation d'un corpus exploitable}
 \author{Talel Mdalla \and Adem Sghaier \and Aziz Oueslati}
-\date{Projet de fouille de données et d'intelligence artificielle}
+\date{}
 
 \begin{document}
 
@@ -47,89 +47,93 @@
 \end{tikzpicture}
 \vspace{.6cm}
 {\color{Gold}\small PROJET DE DATA MINING ET NLP}\par\vspace{.4cm}
-{\color{white}\LARGE\bfseries Sujet 4 : Détection des émotions\\dans les textes en langues arabes}\par\vspace{.4cm}
-{\color{white!85}\large Collecter, comprendre et préparer les données avec un agent IA}\par
+{\color{white}\LARGE\bfseries Détecter les émotions\\dans les textes en arabe}\par\vspace{.4cm}
+{\color{white!85}\large De la recherche Web à un corpus prêt pour l'analyse NLP}\par
 \vspace{.9cm}
 \begin{beamercolorbox}[wd=.86\linewidth,sep=.18cm,rounded=true]{block body}
-\textbf{Question (partie 3)}\\[-1pt]
-Variation des émotions en fonction de quoi ?\\
-\textcolor{Blue}{\textbf{En fonction du thème abordé}} : sport, économie, politique, religion, technologie et santé.
+\textbf{Notre question}\\[-1pt]
+Comment les émotions annotées varient-elles selon le thème ?\\
+\textcolor{Blue}{\textbf{Par thème}} : sport, économie, politique, religion, technologie et santé.
 \end{beamercolorbox}
 \vfill
 {\color{white!90}\normalsize Talel Mdalla \qquad Adem Sghaier \qquad Aziz Oueslati}\par
-{\color{white!70}\small 31 octobre 2026}\vspace{.45cm}
+
 \end{frame}
 
-% 2 — Problème métier
-\begin{frame}{Compréhension métier : le besoin}
+% 2 — Business understanding
+\begin{frame}{1. Business understanding : partir du besoin}
 \begin{columns}[T,onlytextwidth]
-\column{.53\textwidth}
-\large\textbf{Le problème}\par
-Les réactions en arabe publiées sur le Web sont nombreuses et réparties sur des sujets variés. Une lecture manuelle rend leur comparaison lente et difficile à reproduire.
-\vspace{.35cm}
-\begin{block}{Question de recherche}
-Comment les émotions exprimées dans le corpus varient-elles selon le thème abordé ?
+\column{.51\textwidth}
+\textbf{Le contexte}\par
+Des textes arabes et des réactions publiques circulent sur de nombreux thèmes. À grande échelle, leur lecture manuelle prend du temps et ne permet pas facilement des comparaisons cohérentes.
+\vspace{.22cm}
+\begin{block}{Le problème à résoudre}
+Comment décrire les émotions annotées dans les textes et les comparer d'un thème à l'autre ?
 \end{block}
-\column{.43\textwidth}
-\textbf{Objectifs du projet}
-\begin{enumerate}\item Collecter et structurer des textes arabes.\item Décrire les thèmes et émotions.\item Nettoyer et partitionner le corpus.\item Préparer une base pour une future classification NLP.\end{enumerate}
+\column{.45\textwidth}
+\textbf{Pourquoi la fouille de données et le ML ?}\par
+La fouille de données aide à explorer un grand corpus et à faire ressortir ses structures. Le NLP et le machine learning pourront ensuite automatiser le classement, après validation des annotations.
 \end{columns}
-\vspace{.15cm}
-\begin{center}\textcolor{Blue}{\textbf{Pourquoi data mining + ML ?}}\quad Résumer les volumes aujourd'hui; automatiser le classement de textes demain.\end{center}
+\vspace{.12cm}
+\textbf{Nos objectifs}\quad Cadrer six thèmes et cinq émotions; collecter et documenter des textes; mesurer la qualité; préparer un corpus reproductible pour l'analyse et de futurs essais NLP.
+\vspace{.12cm}
+\begin{beamercolorbox}[wd=\linewidth,sep=.13cm,center,rounded=true]{block body}
+\textbf{Notre valeur :} nous avons relié une question métier à un processus concret, traçable et réutilisable, de la collecte aux données prêtes à analyser.
+\end{beamercolorbox}
 \end{frame}
 
-% 3 — Démarche globale
-\begin{frame}{Plan de travail : quatre phases liées}
+% 3 — Plan de travail
+\begin{frame}{Notre plan : quatre phases, un même objectif}
 \centering
 \begin{tikzpicture}[node distance=1.05cm]
-\node[nodebox] (b) {\textbf{1. Business understanding}\\Question, contexte, objectifs};
-\node[nodebox,right=of b] (c) {\textbf{2. Data collection}\\Agent IA et sources Web};
-\node[nodebox,right=of c] (u) {\textbf{3. Data understanding}\\Description et qualité};
-\node[nodebox,right=of u] (p) {\textbf{4. Data preparation}\\Nettoyage et partitions};
+\node[nodebox] (b) {\textbf{1. Business understanding}\\Problème, contexte, objectifs};
+\node[nodebox,right=of b] (c) {\textbf{2. Data collection}\\Sources, données brutes, outils};
+\node[nodebox,right=of c] (u) {\textbf{3. Data understanding}\\Exploration et qualité};
+\node[nodebox,right=of u] (p) {\textbf{4. Data preparation}\\Nettoyage et transformation};
 \draw[arrow] (b)--(c);\draw[arrow] (c)--(u);\draw[arrow] (u)--(p);
-\node[below=.8cm of c,mini] (raw) {Pages et textes bruts};
-\node[below=.8cm of u,mini] (clean) {Corpus structuré};
-\node[below=.8cm of p,mini] (splits) {Train / validation / test};
+\node[below=.8cm of c,mini] (raw) {Pages Web et textes arabes};
+\node[below=.8cm of u,mini] (clean) {Corpus décrit et contrôlé};
+\node[below=.8cm of p,mini] (splits) {Corpus préparé + partitions};
 \draw[arrow] (c.south) -- (raw.north);\draw[arrow] (u.south)--(clean.north);\draw[arrow] (p.south)--(splits.north);
 \end{tikzpicture}
 \vspace{.45cm}
-\begin{beamercolorbox}[wd=.86\linewidth,sep=.16cm,center,rounded=true]{block body}
-Chaque phase transforme une question métier en données structurées, vérifiées et prêtes pour l'analyse.
+\begin{beamercolorbox}[wd=.9\linewidth,sep=.16cm,center,rounded=true]{block body}
+Chaque phase répond à une question précise et produit les éléments nécessaires à la suivante : du besoin métier à un corpus exploitable.
 \end{beamercolorbox}
 \end{frame}
 
 % 4 — Architecture agent
-\begin{frame}{L'agent IA : de la requête aux données}
+\begin{frame}{Collecte : notre agent transforme une recherche en données}
 \centering
 \begin{tikzpicture}[node distance=5mm and 7mm]
-\node[mini] (prompt) {\textbf{Prompt}\\requête arabe};
-\node[mini,right=of prompt] (search) {\textbf{Tavily API}\\recherche Web};
+\node[mini] (prompt) {\textbf{Notre consigne}\\thèmes + critères};
+\node[mini,right=of prompt] (search) {\textbf{Tavily}\\recherche Web};
 \node[mini,right=of search] (web) {\textbf{Pages Web}\\URL, titre, contenu};
 \node[mini,below=of web] (extract) {\textbf{Extraction}\\segments arabes};
-\node[mini,left=of extract] (gemini) {\textbf{Gemini API}\\filtre + annotations};
-\node[mini,left=of gemini] (csv) {\textbf{Exports}\\CSV + manifeste};
+\node[mini,left=of extract] (gemini) {\textbf{Gemini}\\filtre + labels proposés};
+\node[mini,left=of gemini] (csv) {\textbf{Nos sorties}\\CSV + manifeste};
 \draw[arrow] (prompt)--(search);\draw[arrow] (search)--(web);\draw[arrow] (web)--(extract);\draw[arrow] (extract)--(gemini);\draw[arrow] (gemini)--(csv);
 \end{tikzpicture}
 \vspace{.65cm}
 \begin{columns}[T,onlytextwidth]
 \column{.48\textwidth}\begin{block}{Tavily}
-Recherche de pages publiques, jusqu'à 10 résultats en arabe et ciblage géographique Tunisie.
+Nous envoyons la requête arabe à Tavily, qui renvoie jusqu'à 10 pages publiques ciblées sur la Tunisie. Notre script extrait les segments, retire le balisage et garde le texte arabe suffisamment long.
 \end{block}
 \column{.48\textwidth}\begin{block}{Gemini}
-Vérifie la pertinence, assigne un thème et propose une émotion selon un schéma contrôlé.
+Nous demandons à Gemini de filtrer les segments pertinents puis de proposer un thème et une émotion selon nos catégories. Le script exporte les lignes et un manifeste qui documente leurs sources.
 \end{block}
 \end{columns}
-\vspace{.12cm}\small Les clés API sont chargées depuis \texttt{AI\_agent/.env}; elles ne sont pas intégrées au dépôt Git.
+\vspace{.12cm}\small Ces étiquettes sont des propositions automatiques : une vérification humaine reste nécessaire.
 \end{frame}
 
 % 5 — Collecte et schéma
-\begin{frame}{Collecte : extraire, filtrer, enrichir}
+\begin{frame}{2. Data collection : rechercher, extraire, enrichir}
 \begin{columns}[T,onlytextwidth]
 \column{.47\textwidth}
-\textbf{Traitement des pages}\par
-\begin{enumerate}\item Lire le contenu brut disponible.\item Retirer le balisage et les liens.\item Segmenter le texte.\item Garder les segments arabes d'au moins 25 caractères.\item Écarter les répétitions exactes.\item Faire annoter les textes pertinents.\end{enumerate}
+\textbf{Sources, données brutes et outils}\par
+\begin{enumerate}\item Interroger le Web avec Tavily (jusqu'à 10 pages publiques).\item Extraire le contenu brut et retirer liens et balisage.\item Segmenter le texte.\item Garder les segments arabes d'au moins 25 caractères.\item Écarter les répétitions exactes.\item Faire filtrer et annoter les segments par Gemini.\end{enumerate}
 \column{.49\textwidth}
-\textbf{Schéma du CSV}\par\vspace{.15cm}
+\textbf{Structurer et enrichir}\par\vspace{.15cm}
 \begin{tabular}{>{\ttfamily}l p{5.1cm}}\toprule
 id & identifiant stable de l'observation\\\midrule
 text & segment arabe extrait de la page\\
@@ -139,14 +143,14 @@ emotion & joy, anger, sadness, hope ou neutral\\\bottomrule
 \end{columns}
 \vspace{.35cm}
 \begin{center}\colorbox{Pale}{\parbox{.9\linewidth}{\centering\small
-Le manifeste relie chaque identifiant à son URL, au titre, à la requête, à l'heure UTC, à l'empreinte du texte et au modèle d'annotation.}}\end{center}
+Nous réunissons texte, thème et émotion dans le CSV; le manifeste ajoute la provenance (URL, titre, requête, date) et la méthode d'annotation.}}\end{center}
 \end{frame}
 
 % 6 — Compréhension données / qualité
-\begin{frame}{Compréhension des données : portrait du corpus}
+\begin{frame}{3. Data understanding : décrire, explorer, contrôler}
 \centering
 \begin{tikzpicture}[node distance=7mm]
-\node[mini,text width=2.25cm] (n) {\textcolor{Blue}{\LARGE\bfseries 50\,050}\\lignes initiales};
+\node[mini,text width=2.25cm] (n) {\textcolor{Blue}{\LARGE\bfseries 50\,050}\\lignes du corpus de référence};
 \node[mini,text width=2.25cm,right=of n] (missing) {\textcolor{Teal}{\LARGE\bfseries 0}\\valeur manquante};
 \node[mini,text width=2.25cm,right=of missing] (topics) {\textcolor{Blue}{\LARGE\bfseries 6}\\thèmes};
 \node[mini,text width=2.25cm,right=of topics] (emotions) {\textcolor{Teal}{\LARGE\bfseries 5}\\émotions};
@@ -154,7 +158,7 @@ Le manifeste relie chaque identifiant à son URL, au titre, à la requête, à l
 \vspace{.65cm}
 \begin{columns}[T,onlytextwidth]
 \column{.48\textwidth}
-\textbf{Contrôles réalisés}
+\textbf{Description et qualité}
 \begin{itemize}\item colonnes attendues présentes;\item textes et labels manquants contrôlés;\item validité des catégories vérifiée;\item doublons exacts détectés;\item longueurs et distributions décrites.\end{itemize}
 \column{.48\textwidth}
 \textbf{Longueur du texte}\par\vspace{.25cm}
@@ -171,7 +175,7 @@ Le manifeste relie chaque identifiant à son URL, au titre, à la requête, à l
 
 % 7 — Répartition thèmes
 \begin{frame}{Exploration : les six thèmes}
-\small Chaque barre représente la part du thème dans les 49\,055 textes préparés.
+\small Répartition descriptive du corpus de référence préparé (49\,055 textes).
 \vspace{.2cm}
 \begin{center}
 \begin{tikzpicture}[x=0.42cm,y=.63cm]
@@ -186,7 +190,7 @@ Le manifeste relie chaque identifiant à son URL, au titre, à la requête, à l
 \end{center}
 \vspace{.15cm}
 \begin{beamercolorbox}[wd=.9\linewidth,sep=.15cm,center,rounded=true]{block body}
-La question « variation selon quoi ? » est opérationnalisée par le champ \texttt{topic} : on compare les émotions à l'intérieur de chaque thème.
+Le champ \texttt{topic} permet de comparer les distributions d'émotions par thème. Ces chiffres décrivent le corpus, pas la population.
 \end{beamercolorbox}
 \end{frame}
 
@@ -212,44 +216,34 @@ Chaque classe représente environ 20\% du corpus. La comparaison par thème s'ap
 \end{frame}
 
 % 9 — préparation et split
-\begin{frame}{Préparation : nettoyer puis partitionner}
-\centering
-\begin{tikzpicture}[node distance=4mm and 5mm]
-\node[mini] (raw) {CSV source\\50\,050};
-\node[mini,right=of raw] (norm) {Normaliser\\espaces + labels};
-\node[mini,right=of norm] (valid) {Contrôler\\texte + catégories};
-\node[mini,right=of valid] (dedup) {Dédupliquer\\995 retirés};
-\node[mini,right=of dedup] (clean) {Corpus prêt\\49\,055};
-\draw[arrow] (raw)--(norm);\draw[arrow] (norm)--(valid);\draw[arrow] (valid)--(dedup);\draw[arrow] (dedup)--(clean);
-\end{tikzpicture}
-\vspace{.7cm}
-\textbf{Découpage stratifié par thème et émotion (graine 42)}
-\vspace{.15cm}
-\begin{tikzpicture}[x=1cm,y=1cm]
-\fill[Blue] (0,0) rectangle (8.4,.65);
-\fill[Teal] (8.4,0) rectangle (10.2,.65);
-\fill[Gold] (10.2,0) rectangle (12,.65);
-\node[white,font=\small\bfseries] at (4.2,.32) {Train : 34\,327 (70\%)};
-\node[white,font=\scriptsize\bfseries] at (9.3,.32) {Val.\\7\,347};
-\node[Navy,font=\scriptsize\bfseries] at (11.1,.32) {Test\\7\,381};
-\end{tikzpicture}
-\vspace{.45cm}
-\small Les caractères arabes et les emojis sont conservés; les CSV sont exportés en UTF-8 avec BOM.
+\begin{frame}{4. Data preparation : fiabiliser et rendre exploitable}
+\begin{block}{Nettoyage et transformation}
+Nous normalisons les espaces et les étiquettes, supprimons 995 textes répétés et conservons l'écriture arabe ainsi que les emojis.
+\end{block}
+\begin{center}
+\Large\textcolor{Blue}{50\,050 textes de référence}\quad$\longrightarrow$\quad\textcolor{Teal}{49\,055 textes préparés}
+\end{center}
+\vspace{.3cm}
+\textbf{Partitions reproductibles}\quad Découpage stratifié selon le thème et l'émotion, avec la graine 42 :
+\begin{itemize}
+\item Entraînement : 34\,327 textes (70\%); validation : 7\,347 (15\%); test : 7\,381 (15\%).
+\item Les CSV sont exportés en UTF-8 pour préserver correctement les caractères arabes.
+\end{itemize}
 \end{frame}
 
 % 10 — Conclusion
-\begin{frame}{Résultat : un corpus prêt pour l'analyse}
+\begin{frame}{Bilan : un corpus préparé, une analyse à poursuivre}
 \begin{columns}[T,onlytextwidth]
 \column{.55\textwidth}
-\textbf{Ce que le projet a construit}
-\begin{itemize}\item un agent de recherche et d'annotation initiale;\item un schéma de données stable et documenté;\item un pipeline reproductible de nettoyage et d'exploration;\item trois partitions réutilisables pour des expériences NLP.\end{itemize}
+\textbf{La valeur livrée par l'équipe}
+\begin{itemize}\item un agent qui automatise recherche, extraction et annotation assistée;\item une structure de données avec traçabilité des sources;\item un pipeline reproductible pour contrôler et préparer le corpus;\item des analyses descriptives et trois partitions prêtes pour de futurs essais NLP.\end{itemize}
 \column{.4\textwidth}
 \begin{block}{Suite logique}
-Entraîner un modèle de classification des émotions, l'évaluer sur le jeu de test, puis comparer les résultats par thème.
+Faire vérifier un échantillon des étiquettes par des personnes, puis entraîner et évaluer un classifieur avant toute interprétation.
 \end{block}
 \end{columns}
 \vfill
-\begin{center}\Large\textcolor{Blue}{Des pages Web aux données prêtes pour le NLP}\end{center}
+\begin{center}\Large\textcolor{Blue}{De la collecte assistée à une base documentée pour le NLP}\end{center}
 \end{frame}
 
 \end{document}
